@@ -1,0 +1,12 @@
+{% extends 'shared/layout.html' %}
+{% load poll_extras %}
+
+{% block title %}
+    سبد خرید کاربر
+{% endblock %}
+
+{% block content %}
+    <div id="order-detail-content">
+        {% include 'user_panel_module/user_basket_component.html' %}
+    </div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'admin_panel/shared/_layout.html' %}
+
+{% block title %}
+    مدیریت مثالات
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover table-striped">
+                    <tr>
+                        <th>عنوان</th>
+                        <th>وضعیت</th>
+                        <th>دستورات</th>
+                    </tr>
+
+                    {% for admin_article in admin_articles %}
+                        <tr>
+                            <td> {{ admin_article.title }} </td>
+                            <td> {% if admin_article.is_active %}
+                                <span class="text-success"> فعال </span>
+                            {% else %}
+                                <span class="text-danger"> غیرفعال </span>
+                            {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'admin_edit_article' pk=admin_article.id %}" class="btn btn-warning"> ویرایش </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

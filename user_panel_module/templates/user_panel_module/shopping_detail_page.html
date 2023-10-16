@@ -1,0 +1,41 @@
+{% extends 'shared/layout.html' %}
+{% load render_partial %}
+{% load poll_extras %}
+
+{% block title %}
+    جزییات خرید قبلی
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+
+                {% render_partial 'user_panel_module.views.user_panel_menu_component' %}
+            </div>
+
+            <div class="col-md-8">
+                <table class="table table-responsive table-hover table-striped">
+                    <tr>
+                        <th class="text text-right" style="color: #e51c9f"> شناسه محصول</th>
+                        <th class="text text-right" style="color: #e51c9f"> نام محصول </th>
+                        <th class="text text-right" style="color: #e51c9f"> تعداد </th>
+                        <th class="text text-right" style="color: #e51c9f"> قیمت نهایی محصول</th>
+
+                    </tr>
+
+                    {% for detail in order.orderdetail_set.all %}
+                        <td> {{ detail.id }} </td>
+                        <td> {{ detail.product.title }} </td>
+                        <td> {{ detail.count }} </td>
+                        <td> {{ order.calculate_total_price | there_digits_currency }} تومان</td>
+
+                    {% endfor %}
+
+
+                </table>
+                <br>
+            </div>
+        </div>
+    </div>
+{% endblock %}

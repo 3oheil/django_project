@@ -1,0 +1,129 @@
+{% extends 'shared/layout.html' %}
+{% load thumbnail %}
+{% load render_partial %}
+{% load poll_extras %}
+
+{% block title %}
+    لیست محصولات
+{% endblock %}
+
+{% block content %}
+    <section>
+        <div class="container">
+            <div class="row">
+
+                <div class="col-sm-9 padding-right">
+                    {% if products %}
+                        <div class="features_items"><!--features_items-->
+                            <h2 class="title text-center">محصولات </h2>
+
+                            {% for product in products %}
+                                <div class="col-sm-4">
+                                    <div class="product-image-wrapper">
+                                        <div class="single-products">
+                                            <div class="productinfo text-center">
+
+                                                {% thumbnail product.image "268x250" quality=100 crop='center' as im %}
+                                                    <img src="{{ im.url }}">
+                                                {% endthumbnail %}
+
+                                                <h5 style="color: #e51c9f"> {{ product.title }} </h5>
+                                                <h2>{{ product.price | there_digits_currency }} تومان </h2>
+                                                <a href="#" class="btn btn-default add-to-cart"><i
+                                                        class="fa fa-shopping-cart"></i> توضیحات محصول </a>
+                                            </div>
+                                            <div class="product-overlay">
+                                                <div class="overlay-content">
+                                                    <h2>{{ product.price | there_digits_currency }} تومان</h2>
+                                                    <a href="{% url 'product_detail' slug=product.slug %}"
+                                                       class="btn btn-default add-to-cart"><i
+                                                            class="fa fa-shopping-cart"></i> توضیحات محصول </a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+                            <ul class="pagination">
+
+                                {% if page_obj.has_previous %}
+                                    <li><a class="cursor-pointer"
+                                           onclick="fillPage({{ page_obj.previous_page_number }})"
+                                           style="color:#e51c9f ">
+                                        قبلی </a></li>
+                                {% endif %}
+
+                                {% for pageNumber in paginator.page_range %}
+                                    <li class="{% if page_obj.number == pageNumber %} active {% endif %} "><a
+                                            class="cursor-pointer"
+                                            onclick="fillPage({{ pageNumber }})"> {{ pageNumber }} </a></li>
+                                {% endfor %}
+
+                                {% if page_obj.has_next %}
+                                    <li><a class="cursor-pointer" onclick="fillPage({{ page_obj.next_page_number }})"
+                                           style="color:#e51c9f">
+                                        بعدی </a>
+                                    </li>
+                                {% endif %}
+
+                            </ul>
+                        </div><!--features_items-->
+                    {% else %}
+                        <div class="alert alert-warning">
+                            <p> هیچ محصولی یافت نشد </p>
+                        </div>
+                    {% endif %}
+
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="left-sidebar">
+
+                        {% render_partial 'product_module.views.product_category_component' %}
+
+                        {% render_partial 'product_module.views.product_brand_component' %}
+
+                        <div class="price-range"><!--price-range-->
+                            <h2>فیلتـر قیمـت</h2>
+                            <div class="well">
+                                <input type="text"
+                                       class="span2"
+                                       value="{{ start_price }}, {{ end_price }}"
+                                       data-slider-min="0"
+                                       data-slider-max="{{ db_max_price }}"
+                                       data-slider-step="100000"
+                                       data-slider-value="[{{ start_price }},{{ end_price }}]"
+                                       id="sl2">
+                                <br/>
+                                <b> {{ db_max_price }} </b> <b class="pull-left"> 0 </b>
+                            </div>
+                        </div><!--/price-range-->
+
+                        <div>
+                            <form action="" method="get" id="filter_form">
+                                <input type="hidden" name="start_price" value="{{ start_price }}" id="start_price">
+                                <input type="hidden" name="page" value="{{ page_obj.number }}" id="page">
+                                <input type="hidden" name="end_price" value="{{ end_price }}" id="end_price">
+                            </form>
+                            <button class="btn btn-success btn-block" onclick="filterProducts()"> فیلتر</button>
+                        </div>
+
+
+                        <div class="shipping text-center"><!--shipping-->
+                            {% for banner in banners %}
+                                <a href="{{ banner.url }}">
+                                    <img src="{{ banner.image.url }}" width="250" alt="">
+                                </a>
+                            {% endfor %}
+
+                        </div><!--/shipping-->
+                        <br>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+{% endblock %}

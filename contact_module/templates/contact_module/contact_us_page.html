@@ -1,0 +1,54 @@
+{% extends 'shared/layout.html' %}
+
+{% block title %}تماس با ما{% endblock %}
+
+{% block content %}
+    <div id="contact-page" class="container">
+        <div class="bg">
+
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="contact-form">
+                        <h2 class="title text-center">با ما در ارتباط باشیـد</h2>
+                        <div class="status alert alert-success" style="display: none"></div>
+                        <form id="main-contact-form" class="contact-form row" name="contact-form" method="post"
+                              action="{% url 'contact_us' %}">
+                            {% csrf_token %}
+
+                            {{ form }}
+
+                            <button type="submit" class="btn btn-primary pull-right"> ارسال</button>
+
+                        </form>
+                    </div>
+
+                    {% comment %} append a baner here {% endcomment %}
+
+                </div>
+                <div class="col-sm-4 padding-right">
+                    <div class="contact-info">
+                        <h2 class="title text-center">اطلاعات تماس</h2>
+                        <address>
+                            <h4 style="color:#e51c9f"> {{ site_setting.site_name }} </h4>
+                            <p> {{ site_setting.address }} </p>
+                            <p>تلفن تماس : {{ site_setting.phone }}</p>
+                            {% if site_setting.fax %}
+                                <p>فکس : {{ site_setting.fax }}</p>
+                            {% endif %}
+                            <p style="font-family: tahoma;">ایمیـل : {{ site_setting.email }}</p>
+                        </address>
+
+                        <div class="shipping text-right"><!--shipping-->
+                            {% for banner in banners %}
+                                <a href="{{ banner.url }}">
+                                    <img src="{{ banner.image.url }}" width="250" alt="">
+                                </a>
+                            {% endfor %}
+
+                        </div><!--/shipping-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
